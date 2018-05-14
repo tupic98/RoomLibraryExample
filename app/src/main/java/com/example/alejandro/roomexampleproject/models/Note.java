@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity(foreignKeys = @ForeignKey(entity = User.class,
                                             parentColumns = "id",
                                             childColumns = "user_id",
@@ -15,6 +17,25 @@ public class Note {
 
     @ColumnInfo(name = "data")
     private String data;
+
+    public Note(int id, String data, Date date, int userId) {
+        this.id = id;
+        this.data = data;
+        this.date = date;
+        this.userId = userId;
+    }
+
+    public Date getDate() {
+
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @ColumnInfo(name = "date")
+    private Date date;
 
     @ColumnInfo(name = "user_id")
     private int userId;
