@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.alejandro.roomexampleproject.R;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         //database
         database = AppDatabase.getInstance(getApplicationContext());
-        database.userDao().insert();
+        prepareUsers();
 
         //setting up the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -68,9 +69,17 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                UserInfoFragment userInfoFragment = new UserInfoFragment();
-                userInfoFragment.setUser(database.userDao().getAll().get(0));
-                fragmentTransaction.replace(R.id.contentFrame, userInfoFragment);
+                switch (item.getItemId()){
+                    case R.id.user:
+                        UserInfoFragment userInfoFragment = new UserInfoFragment();
+                        userInfoFragment.setUser(database.userDao().getAll().get(0));
+                        fragmentTransaction.replace(R.id.contentFrame, userInfoFragment);
+                        break;
+
+                    case R.id.notes:
+                        Log.d("DrawerLayout", "Notes not implemented yet");
+                        break;
+                }
                 fragmentTransaction.commit();
                 return true;
             }
