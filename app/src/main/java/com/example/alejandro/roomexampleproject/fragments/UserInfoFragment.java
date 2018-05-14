@@ -11,10 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.alejandro.roomexampleproject.R;
+import com.example.alejandro.roomexampleproject.models.Note;
 import com.example.alejandro.roomexampleproject.models.User;
+
+import java.util.List;
 
 public class UserInfoFragment extends Fragment{
     User user;
+    List<Note> userNotes;
     TextView firstName, lastName;
 
 
@@ -34,5 +38,9 @@ public class UserInfoFragment extends Fragment{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setUserNotes(List<Note> userNotes){
+        this.userNotes = userNotes;
     }
 }
