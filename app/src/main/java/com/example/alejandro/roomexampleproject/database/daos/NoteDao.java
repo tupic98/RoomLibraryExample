@@ -30,7 +30,4 @@ public interface NoteDao {
 
     @Query("SELECT * FROM Note WHERE user_id=(:userId)")
     List<Note> getAllNotesByUser(int userId);
-
-    @Query("SELECT * FROM Note WHERE date < (:date)")
-    List<Note> getAllNotesBeforeDate(Date date);
 }

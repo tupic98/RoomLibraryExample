@@ -18,24 +18,15 @@ public class Note {
     @ColumnInfo(name = "data")
     private String data;
 
+    public Note() {
+    }
+
     public Note(int id, String data, Date date, int userId) {
         this.id = id;
         this.data = data;
-        this.date = date;
         this.userId = userId;
     }
 
-    public Date getDate() {
-
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    @ColumnInfo(name = "date")
-    private Date date;
 
     @ColumnInfo(name = "user_id")
     private int userId;
