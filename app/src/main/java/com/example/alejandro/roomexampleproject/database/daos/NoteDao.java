@@ -8,6 +8,7 @@ import android.arch.persistence.room.Update;
 
 import com.example.alejandro.roomexampleproject.models.Note;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -24,9 +25,12 @@ public interface NoteDao {
     @Query("SELECT * FROM Note")
     List<Note> getAll();
 
-    @Query("SELECT * FROM Note where id=(:id)")
+    @Query("SELECT * FROM Note WHERE id=(:id)")
     Note findNoteById(int id);
 
-    @Query("SELECT * FROM Note where user_id=(:userId)")
+    @Query("SELECT * FROM Note WHERE user_id=(:userId)")
     List<Note> getAllNotesByUser(int userId);
+
+    @Query("SELECT * FROM Note WHERE date < (:date)")
+    List<Note> getAllNotesBeforeDate(Date date);
 }
