@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private class GetUsersAsync extends AsyncTask<Void, User, User>{
+    private class GetUsersAsync extends AsyncTask<Void, User, User>{ //This is a thread
         private final UserDao userdao;
 
         private GetUsersAsync(AppDatabase db) {
@@ -90,12 +90,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected User doInBackground(Void... voids) {
+        protected User doInBackground(Void... voids) { //Transaccion de los datos en background
             return userdao.getAll().get(0);
         }
 
         @Override
-        protected void onPostExecute(User user) {
+        protected void onPostExecute(User user) { //Se corre en el thread principal, no en el Async
             super.onPostExecute(user);
             UserInfoFragment fragment = new UserInfoFragment();
             fragment.setUser(user);
@@ -119,6 +119,19 @@ public class MainActivity extends AppCompatActivity {
             userdao.insert(new User("Alejandro", "Velasco", "22577777"),
                     new User("Enrique", "Palacios", "22577777"));
             return null;
+        }
+    }
+
+    private class FirstAsyncClass extends  AsyncTask<Void,Void,Void>{//<Params, Progress, Result>, <doInBackground, , onPostExecute>
+
+        @Override
+        protected Void doInBackground(Void... voids) { //Unico metodo necesario. Lo que va a pasar en el fondo. Yeah
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) { //Correr en el UIThread. Las referencias ya existen en este metodo, se ejecuta en el main Thread
+            super.onPostExecute(aVoid);
         }
     }
  }

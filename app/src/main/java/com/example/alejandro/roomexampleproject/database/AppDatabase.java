@@ -16,7 +16,7 @@ import com.example.alejandro.roomexampleproject.models.User;
 @Database(entities = {User.class, Note.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase{
     private static final String DB_NAME = "notesDatabase.db";
-    private static volatile AppDatabase instance;
+    private static volatile AppDatabase instance; //Volatile: Este espacio de memoria no va a hacer cambios en memoria cache del thread
 
     public static synchronized AppDatabase getInstance(Context context){
         if (instance == null){
