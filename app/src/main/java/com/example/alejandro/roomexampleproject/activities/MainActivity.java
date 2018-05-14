@@ -16,7 +16,6 @@ import android.view.MenuItem;
 
 import com.example.alejandro.roomexampleproject.R;
 import com.example.alejandro.roomexampleproject.database.AppDatabase;
-import com.example.alejandro.roomexampleproject.database.daos.UserDao;
 import com.example.alejandro.roomexampleproject.fragments.UserInfoFragment;
 import com.example.alejandro.roomexampleproject.models.User;
 
@@ -70,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.user:
                         UserInfoFragment userInfoFragment = new UserInfoFragment();
-                        new GetFirstUserAsync(database).execute();
                         userInfoFragment.setUser(firstUser);
                         fragmentTransaction.replace(R.id.contentFrame, userInfoFragment);
                         break;
@@ -83,24 +81,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    private class GetFirstUserAsync extends AsyncTask<Void, User, User> {
-        private final UserDao userDao;
-        private User user;
-
-        public GetFirstUserAsync(AppDatabase db) {
-            this.userDao = db.userDao();
-        }
-
-        @Override
-        protected User doInBackground(Void... voids) {
-            return userDao.getAll().get(0);
-        }
-
-        @Override
-        protected void onPostExecute(User user) {
-            super.onPostExecute(user);
-            fragmentTransaction.commit();
-        }
-    }
-}
+ }

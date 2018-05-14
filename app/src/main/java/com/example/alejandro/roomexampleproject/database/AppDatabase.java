@@ -31,43 +31,9 @@ public abstract class AppDatabase extends RoomDatabase{
                 context,
                 AppDatabase.class,
                 DB_NAME
-        ).addCallback(roomDatabaseCallback).build();
+        ).build();
     }
-
-    private static class PopulateDatabaseAsync extends AsyncTask<Void, Void, Void> {
-
-        private final UserDao userDao;
-        private final NoteDao noteDao;
-
-        private PopulateDatabaseAsync(AppDatabase db) {
-            this.userDao = db.userDao();
-            this.noteDao = db.noteDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            prepareUsers();
-            return null;
-        }
-    }
-
-    private static RoomDatabase.Callback roomDatabaseCallback =
-            new RoomDatabase.Callback(){
-
-                @Override
-                public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                    super.onOpen(db);
-                    new PopulateDatabaseAsync(instance).execute();
-                }
-            };
 
     public abstract UserDao userDao();
     public abstract NoteDao noteDao();
-
-    protected static void prepareUsers(){
-        instance.userDao().insert(new User("Alejandro", "Velasco", "22577777"));
-        instance.userDao().insert(new User("Enrique", "Palacios", "22577777"));
-
-        instance.noteDao().insert(new Note("first note, hello world :)", 1));
-    }
 }
