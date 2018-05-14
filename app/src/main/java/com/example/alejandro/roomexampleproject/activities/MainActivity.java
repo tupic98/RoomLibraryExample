@@ -16,6 +16,8 @@ import android.view.MenuItem;
 
 import com.example.alejandro.roomexampleproject.R;
 import com.example.alejandro.roomexampleproject.database.AppDatabase;
+import com.example.alejandro.roomexampleproject.database.daos.NoteDao;
+import com.example.alejandro.roomexampleproject.database.daos.UserDao;
 import com.example.alejandro.roomexampleproject.fragments.UserInfoFragment;
 import com.example.alejandro.roomexampleproject.models.User;
 
@@ -24,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     ActionBar actionBar;
     AppDatabase database;
-    User firstUser;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         //database
         database = AppDatabase.getInstance(getApplicationContext());
+        new FillInitialDbAsync(database).execute();
 
         //setting up the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -68,9 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()){
                     case R.id.user:
-                        UserInfoFragment userInfoFragment = new UserInfoFragment();
-                        userInfoFragment.setUser(firstUser);
-                        fragmentTransaction.replace(R.id.contentFrame, userInfoFragment);
+                        new GetUsersAsync(database).execute();
                         break;
 
                     case R.id.notes:
@@ -80,5 +80,45 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private class GetUsersAsync extends AsyncTask<Void, User, User>{
+        private final UserDao userdao;
+
+        private GetUsersAsync(AppDatabase db) {
+            this.userdao = db.userDao();
+        }
+
+        @Override
+        protected User doInBackground(Void... voids) {
+            return userdao.getAll().get(0);
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            super.onPostExecute(user);
+            UserInfoFragment fragment = new UserInfoFragment();
+            fragment.setUser(user);
+
+            fragmentTransaction.replace(R.id.contentFrame, fragment);
+            fragmentTransaction.commit();
+        }
+    }
+
+    private class FillInitialDbAsync extends AsyncTask<Void, Void, Void>{
+        private final UserDao userdao;
+        private final NoteDao notedao;
+
+        private FillInitialDbAsync(AppDatabase db) {
+            this.userdao = db.userDao();
+            this.notedao = db.noteDao();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            userdao.insert(new User("Alejandro", "Velasco", "22577777"),
+                    new User("Enrique", "Palacios", "22577777"));
+            return null;
+        }
     }
  }
