@@ -1,5 +1,6 @@
 package com.example.alejandro.roomexampleproject.activities;
 
+import android.arch.persistence.room.Room;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        database = AppDatabase.getInstance(getApplicationContext());
 
         //setting up the toolbar
         toolbar = findViewById(R.id.toolbar);
