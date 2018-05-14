@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.alejandro.roomexampleproject.R;
+import com.example.alejandro.roomexampleproject.database.AppDatabase;
 import com.example.alejandro.roomexampleproject.fragments.UserInfoFragment;
 import com.example.alejandro.roomexampleproject.models.User;
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     ActionBar actionBar;
+    AppDatabase database;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_agenda);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         //setting up drawerlayout
         drawerLayout = findViewById(R.id.drawerLayout);
