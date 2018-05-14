@@ -6,11 +6,11 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity
 public class User {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "first_name")
-    private String name;
+    private String firstName;
 
     @ColumnInfo(name = "last_name")
     private String lastName;
@@ -27,11 +27,11 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return firstName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.firstName = name;
     }
 
     public String getLastName() {
