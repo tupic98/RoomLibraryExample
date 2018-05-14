@@ -39,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //database
         database = AppDatabase.getInstance(getApplicationContext());
+        database.userDao().insert(new User("Alejandro", "Velasco", "22577777"));
 
         //setting up the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 UserInfoFragment userInfoFragment = new UserInfoFragment();
-                userInfoFragment.setUser(new User("Alejandro", "Velasco", "22577777"));
+                userInfoFragment.setUser(database.userDao().getAll().get(0));
                 fragmentTransaction.replace(R.id.contentFrame, userInfoFragment);
                 fragmentTransaction.commit();
                 return true;
