@@ -16,13 +16,18 @@ import android.view.MenuItem;
 import com.example.alejandro.roomexampleproject.R;
 import com.example.alejandro.roomexampleproject.database.AppDatabase;
 import com.example.alejandro.roomexampleproject.fragments.UserInfoFragment;
+import com.example.alejandro.roomexampleproject.models.Note;
 import com.example.alejandro.roomexampleproject.models.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     ActionBar actionBar;
     AppDatabase database;
+    List<User> userList = new ArrayList<>();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         //database
         database = AppDatabase.getInstance(getApplicationContext());
-        database.userDao().insert(new User("Alejandro", "Velasco", "22577777"));
+        database.userDao().insert();
 
         //setting up the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -70,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
+    private void prepareUsers(){
+        userList.add(new User("Alejandro", "Velasco", "22577777"));
+        userList.add(new User("Enrique", "Palacios", "22577777"));
+
+        database.userDao().insert(userList.get(0), userList.get(1));
+
+        database.noteDao().insert(new Note("first note, hello world :)", 1));
     }
 }
