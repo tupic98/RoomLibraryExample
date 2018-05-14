@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 UserInfoFragment userInfoFragment = new UserInfoFragment();
-                userInfoFragment.setUser(new User());
+                userInfoFragment.setUser(new User("Alejandro", "Velasco", "22577777"));
                 fragmentTransaction.replace(R.id.contentFrame, userInfoFragment);
                 fragmentTransaction.commit();
                 return true;
