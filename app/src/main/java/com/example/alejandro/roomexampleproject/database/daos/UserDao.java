@@ -12,6 +12,14 @@ import java.util.List;
 
 @Dao
 public interface UserDao {
+    @Insert
+    void insert(User... users);
+
+    @Delete
+    void delete(User user);
+
+    @Update
+    void update(User... users);
 
     @Query("SELECT * FROM user")
     List<User> getAll();
@@ -27,13 +35,4 @@ public interface UserDao {
 
     @Query("SELECT * FROM user WHERE first_name LIKE (:first) AND last_name LIKE (:last) LIMIT 1")
     User findByFullName(String first, String last);
-
-    @Insert
-    void insertAll(User... users);
-
-    @Delete
-    void delete(User user);
-
-    @Update
-    void updateUsers(User... users);
 }
