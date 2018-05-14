@@ -1,6 +1,7 @@
 package com.example.alejandro.roomexampleproject.activities;
 
-import android.arch.persistence.room.Room;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -9,26 +10,24 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.alejandro.roomexampleproject.R;
 import com.example.alejandro.roomexampleproject.database.AppDatabase;
+import com.example.alejandro.roomexampleproject.database.daos.UserDao;
 import com.example.alejandro.roomexampleproject.fragments.UserInfoFragment;
-import com.example.alejandro.roomexampleproject.models.Note;
 import com.example.alejandro.roomexampleproject.models.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     ActionBar actionBar;
     AppDatabase database;
-    List<User> userList = new ArrayList<>();
+    User firstUser;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         //database
         database = AppDatabase.getInstance(getApplicationContext());
-        prepareUsers();
 
         //setting up the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -66,13 +64,14 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(true);
                 drawerLayout.closeDrawers();
 
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
 
                 switch (item.getItemId()){
                     case R.id.user:
                         UserInfoFragment userInfoFragment = new UserInfoFragment();
-                        userInfoFragment.setUser(database.userDao().getAll().get(0));
+                        new GetFirstUserAsync(database).execute();
+                        userInfoFragment.setUser(firstUser);
                         fragmentTransaction.replace(R.id.contentFrame, userInfoFragment);
                         break;
 
@@ -80,18 +79,28 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("DrawerLayout", "Notes not implemented yet");
                         break;
                 }
-                fragmentTransaction.commit();
                 return true;
             }
         });
     }
 
-    private void prepareUsers(){
-        userList.add(new User("Alejandro", "Velasco", "22577777"));
-        userList.add(new User("Enrique", "Palacios", "22577777"));
+    private class GetFirstUserAsync extends AsyncTask<Void, User, User> {
+        private final UserDao userDao;
+        private User user;
 
-        database.userDao().insert(userList.get(0), userList.get(1));
+        public GetFirstUserAsync(AppDatabase db) {
+            this.userDao = db.userDao();
+        }
 
-        database.noteDao().insert(new Note("first note, hello world :)", 1));
+        @Override
+        protected User doInBackground(Void... voids) {
+            return userDao.getAll().get(0);
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            super.onPostExecute(user);
+            fragmentTransaction.commit();
+        }
     }
 }
